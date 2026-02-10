@@ -58,11 +58,11 @@ export default async function AdminPage() {
   });
 
   return (
-    <div className="min-h-screen bg-gray-50 p-4 md:p-8" style={{ fontFamily: "'Nunito', sans-serif" }}>
+    <div className="min-h-screen bg-gray-50 p-4 md:p-8" style={{ fontFamily: "var(--font-body)" }}>
       <div className="max-w-7xl mx-auto">
         <h1
           className="text-4xl font-bold mb-8"
-          style={{ fontFamily: "'Bubblegum Sans', cursive", color: "#E31837" }}
+          style={{ fontFamily: "var(--font-heading)", color: "#E31837" }}
         >
           Dhruva&apos;s Birthday - RSVPs
         </h1>

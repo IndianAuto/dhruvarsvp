@@ -1,12 +1,16 @@
+import dynamic from "next/dynamic";
 import HeroSection from "@/components/HeroSection";
 import PhotoGallery from "@/components/PhotoGallery";
-import RSVPForm from "@/components/RSVPForm";
 import SectionWave from "@/components/SectionWave";
-import {
-  Confetti,
-  FloatingMickeys,
-  MickeyEars,
-} from "@/components/MickeyDecorations";
+import { MickeyEars } from "@/components/MickeyDecorations";
+
+const Confetti = dynamic(() =>
+  import("@/components/MickeyDecorations").then((mod) => mod.Confetti)
+);
+const FloatingMickeys = dynamic(() =>
+  import("@/components/MickeyDecorations").then((mod) => mod.FloatingMickeys)
+);
+const RSVPForm = dynamic(() => import("@/components/RSVPForm"));
 
 export default function Home() {
   return (

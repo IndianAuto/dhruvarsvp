@@ -37,14 +37,14 @@ export default function AdminLoginPage() {
   return (
     <div
       className="min-h-screen flex items-center justify-center bg-gray-50 px-4"
-      style={{ fontFamily: "'Nunito', sans-serif" }}
+      style={{ fontFamily: "var(--font-body)" }}
     >
       <div className="w-full max-w-sm">
         <div className="bg-white rounded-2xl shadow-lg p-8">
           <h1
             className="text-2xl font-bold text-center mb-6"
             style={{
-              fontFamily: "'Bubblegum Sans', cursive",
+              fontFamily: "var(--font-heading)",
               color: "#E31837",
             }}
           >
