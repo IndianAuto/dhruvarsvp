@@ -22,11 +22,49 @@ interface FormData {
   dietaryOther: string;
   arrivingByAir: boolean;
   airport: string;
-  arrivalDatetime: string;
+  arrivalDate: string;
+  arrivalTime: string;
   needAccommodation: boolean;
   checkInDate: string;
   checkOutDate: string;
   notes: string;
+}
+
+// Generate date options around the party (March 15)
+function generateDateOptions(startMonth: number, startDay: number, count: number) {
+  const options: { value: string; label: string }[] = [];
+  const dayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+  const monthNames = [
+    "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+    "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",
+  ];
+  for (let i = 0; i < count; i++) {
+    const d = new Date(2025, startMonth, startDay + i);
+    const value = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+    const label = `${dayNames[d.getDay()]}, ${monthNames[d.getMonth()]} ${d.getDate()}`;
+    options.push({ value, label });
+  }
+  return options;
+}
+
+// Arrival dates: March 10–20
+const ARRIVAL_DATES = generateDateOptions(2, 10, 11);
+// Accommodation dates: March 10–22
+const ACCOM_DATES = generateDateOptions(2, 10, 13);
+
+// Time options in 30-min increments
+const TIME_OPTIONS: { value: string; label: string }[] = [];
+for (let h = 0; h < 24; h++) {
+  for (const m of [0, 30]) {
+    const hh = String(h).padStart(2, "0");
+    const mm = String(m).padStart(2, "0");
+    const period = h < 12 ? "AM" : "PM";
+    const h12 = h === 0 ? 12 : h > 12 ? h - 12 : h;
+    TIME_OPTIONS.push({
+      value: `${hh}:${mm}`,
+      label: `${h12}:${mm} ${period}`,
+    });
+  }
 }
 
 export default function RSVPForm() {
@@ -39,7 +77,8 @@ export default function RSVPForm() {
     dietaryOther: "",
     arrivingByAir: false,
     airport: "",
-    arrivalDatetime: "",
+    arrivalDate: "",
+    arrivalTime: "",
     needAccommodation: false,
     checkInDate: "",
     checkOutDate: "",
@@ -72,10 +111,19 @@ export default function RSVPForm() {
     setSubmitting(true);
 
     try {
+      const { arrivalDate, arrivalTime, ...rest } = formData;
+      const payload = {
+        ...rest,
+        arrivalDatetime:
+          arrivalDate && arrivalTime
+            ? `${arrivalDate}T${arrivalTime}`
+            : arrivalDate || "",
+      };
+
       const res = await fetch("/api/rsvp", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(payload),
       });
 
       if (!res.ok) {
@@ -279,7 +327,8 @@ export default function RSVPForm() {
                     ...prev,
                     arrivingByAir: false,
                     airport: "",
-                    arrivalDatetime: "",
+                    arrivalDate: "",
+                    arrivalTime: "",
                     needAccommodation: false,
                     checkInDate: "",
                     checkOutDate: "",
@@ -321,17 +370,42 @@ export default function RSVPForm() {
                   <label className="block text-sm font-bold text-mickey-black mb-1">
                     Arrival Date & Time
                   </label>
-                  <input
-                    type="datetime-local"
-                    value={formData.arrivalDatetime}
-                    onChange={(e) =>
-                      setFormData((prev) => ({
-                        ...prev,
-                        arrivalDatetime: e.target.value,
-                      }))
-                    }
-                    className="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-mickey-yellow focus:outline-none transition-colors text-mickey-black"
-                  />
+                  <div className="grid grid-cols-2 gap-3">
+                    <select
+                      value={formData.arrivalDate}
+                      onChange={(e) =>
+                        setFormData((prev) => ({
+                          ...prev,
+                          arrivalDate: e.target.value,
+                        }))
+                      }
+                      className="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-mickey-yellow focus:outline-none transition-colors text-mickey-black bg-white select-arrow"
+                    >
+                      <option value="">Select date</option>
+                      {ARRIVAL_DATES.map((d) => (
+                        <option key={d.value} value={d.value}>
+                          {d.label}
+                        </option>
+                      ))}
+                    </select>
+                    <select
+                      value={formData.arrivalTime}
+                      onChange={(e) =>
+                        setFormData((prev) => ({
+                          ...prev,
+                          arrivalTime: e.target.value,
+                        }))
+                      }
+                      className="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-mickey-yellow focus:outline-none transition-colors text-mickey-black bg-white select-arrow"
+                    >
+                      <option value="">Select time</option>
+                      {TIME_OPTIONS.map((t) => (
+                        <option key={t.value} value={t.value}>
+                          {t.label}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
                 </div>
 
                 {/* Need accommodation */}
@@ -384,8 +458,7 @@ export default function RSVPForm() {
                       <label className="block text-sm font-bold text-mickey-black mb-1">
                         Check-in Date
                       </label>
-                      <input
-                        type="date"
+                      <select
                         value={formData.checkInDate}
                         onChange={(e) =>
                           setFormData((prev) => ({
@@ -393,15 +466,21 @@ export default function RSVPForm() {
                             checkInDate: e.target.value,
                           }))
                         }
-                        className="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-mickey-yellow focus:outline-none transition-colors text-mickey-black"
-                      />
+                        className="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-mickey-yellow focus:outline-none transition-colors text-mickey-black bg-white select-arrow"
+                      >
+                        <option value="">Select date</option>
+                        {ACCOM_DATES.map((d) => (
+                          <option key={d.value} value={d.value}>
+                            {d.label}
+                          </option>
+                        ))}
+                      </select>
                     </div>
                     <div>
                       <label className="block text-sm font-bold text-mickey-black mb-1">
                         Check-out Date
                       </label>
-                      <input
-                        type="date"
+                      <select
                         value={formData.checkOutDate}
                         onChange={(e) =>
                           setFormData((prev) => ({
@@ -409,8 +488,15 @@ export default function RSVPForm() {
                             checkOutDate: e.target.value,
                           }))
                         }
-                        className="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-mickey-yellow focus:outline-none transition-colors text-mickey-black"
-                      />
+                        className="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-mickey-yellow focus:outline-none transition-colors text-mickey-black bg-white select-arrow"
+                      >
+                        <option value="">Select date</option>
+                        {ACCOM_DATES.map((d) => (
+                          <option key={d.value} value={d.value}>
+                            {d.label}
+                          </option>
+                        ))}
+                      </select>
                     </div>
                   </div>
                 )}
