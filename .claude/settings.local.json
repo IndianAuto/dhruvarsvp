@@ -10,7 +10,8 @@
       "Bash(supabase status:*)",
       "Bash(npx supabase status:*)",
       "Bash(node scripts/apply-migration.mjs:*)",
-      "Bash(npm run dev:*)"
+      "Bash(npm run dev:*)",
+      "Bash(npx next build:*)"
     ]
   }
 }
