@@ -74,7 +74,14 @@ export default function HeroSection() {
                 {/* Cutout circles for ticket effect */}
                 <div className="absolute -top-[34px] -right-[34px] md:-top-[42px] md:-right-[13px] w-6 h-6 bg-transparent rounded-full md:hidden" />
 
-                <span className="text-4xl mb-1">📅</span>
+                <svg className="w-10 h-10 mb-1" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <rect x="4" y="8" width="32" height="28" rx="4" stroke="#E31837" strokeWidth="2.5" />
+                  <path d="M4 16h32" stroke="#E31837" strokeWidth="2.5" />
+                  <rect x="4" y="8" width="32" height="8" rx="4" fill="#E31837" />
+                  <line x1="12" y1="4" x2="12" y2="12" stroke="#E31837" strokeWidth="2.5" strokeLinecap="round" />
+                  <line x1="28" y1="4" x2="28" y2="12" stroke="#E31837" strokeWidth="2.5" strokeLinecap="round" />
+                  <text x="20" y="30" textAnchor="middle" fill="#E31837" fontSize="12" fontWeight="bold" fontFamily="var(--font-heading)">15</text>
+                </svg>
                 <p className="font-bold text-xl text-mickey-black" style={{ fontFamily: "var(--font-heading)" }}>
                   MARCH 15
                 </p>
