@@ -1,0 +1,172 @@
+@import url('https://fonts.googleapis.com/css2?family=Bubblegum+Sans&family=Nunito:wght@400;600;700;800&display=swap');
+@import "tailwindcss";
+
+@theme inline {
+  --color-mickey-red: #E31837;
+  --color-mickey-black: #1A1A1A;
+  --color-mickey-yellow: #FFC72C;
+  --color-mickey-white: #FFFFFF;
+  --font-heading: 'Bubblegum Sans', cursive;
+  --font-body: 'Nunito', sans-serif;
+}
+
+:root {
+  --background: #FFFFFF;
+  --foreground: #1A1A1A;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-body);
+}
+
+/* Mickey polka dot background */
+.mickey-dots {
+  background-image: radial-gradient(circle, #E3183715 1px, transparent 1px);
+  background-size: 30px 30px;
+}
+
+/* Mickey ear silhouette shape */
+.mickey-ears {
+  position: relative;
+  width: 60px;
+  height: 60px;
+}
+
+.mickey-ears::before,
+.mickey-ears::after,
+.mickey-ears .head {
+  content: '';
+  position: absolute;
+  border-radius: 50%;
+  background: var(--color, #1A1A1A);
+}
+
+.mickey-ears .head {
+  width: 40px;
+  height: 40px;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.mickey-ears::before {
+  width: 24px;
+  height: 24px;
+  top: 0;
+  left: 4px;
+}
+
+.mickey-ears::after {
+  width: 24px;
+  height: 24px;
+  top: 0;
+  right: 4px;
+}
+
+/* Confetti animation */
+@keyframes confetti-fall {
+  0% {
+    transform: translateY(-100vh) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(100vh) rotate(720deg);
+    opacity: 0;
+  }
+}
+
+@keyframes confetti-sway {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(30px); }
+  75% { transform: translateX(-30px); }
+}
+
+.confetti-piece {
+  position: fixed;
+  top: -10px;
+  z-index: 50;
+  animation: confetti-fall linear forwards, confetti-sway ease-in-out infinite;
+  pointer-events: none;
+}
+
+/* Mickey divider */
+.mickey-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 16px 0;
+}
+
+.mickey-divider::before,
+.mickey-divider::after {
+  content: '';
+  flex: 1;
+  height: 2px;
+  background: linear-gradient(to right, transparent, #E31837, transparent);
+}
+
+/* Sparkle animation */
+@keyframes sparkle {
+  0%, 100% { opacity: 0; transform: scale(0); }
+  50% { opacity: 1; transform: scale(1); }
+}
+
+.sparkle {
+  animation: sparkle 2s ease-in-out infinite;
+}
+
+/* Float animation */
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+.float-animation {
+  animation: float 3s ease-in-out infinite;
+}
+
+/* Smooth scroll */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Gallery scrollbar */
+.gallery-scroll::-webkit-scrollbar {
+  height: 8px;
+}
+
+.gallery-scroll::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+.gallery-scroll::-webkit-scrollbar-thumb {
+  background: #E31837;
+  border-radius: 4px;
+}
+
+.gallery-scroll::-webkit-scrollbar-thumb:hover {
+  background: #c01430;
+}
+
+/* Success checkmark animation */
+@keyframes check-draw {
+  0% { stroke-dashoffset: 100; }
+  100% { stroke-dashoffset: 0; }
+}
+
+.check-animation path {
+  stroke-dasharray: 100;
+  stroke-dashoffset: 100;
+  animation: check-draw 0.6s ease-out 0.3s forwards;
+}
+
+/* Pulse animation for buttons */
+@keyframes pulse-ring {
+  0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(227, 24, 55, 0.5); }
+  70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(227, 24, 55, 0); }
+  100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(227, 24, 55, 0); }
+}
