@@ -39,7 +39,7 @@ function generateDateOptions(startMonth: number, startDay: number, count: number
     "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",
   ];
   for (let i = 0; i < count; i++) {
-    const d = new Date(2025, startMonth, startDay + i);
+    const d = new Date(2026, startMonth, startDay + i);
     const value = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
     const label = `${dayNames[d.getDay()]}, ${monthNames[d.getMonth()]} ${d.getDate()}`;
     options.push({ value, label });
